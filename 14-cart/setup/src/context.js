@@ -33,6 +33,23 @@ const AppProvider = ({ children }) => {
     dispatch({ type: "INCREASE", payload: id });
   };
 
+  const fetchData = async () => {
+    dispatch({ type: "loading" });
+    try {
+      const response = await fetch(url);
+      const cartData = await response.json();
+      dispatch({ type: "DISPLAY_ITEMS", payload: cartData });
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Error Fetching data: ${error}`);
+    }
+  };
+
+  // ;
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   useEffect(() => {
     dispatch({ type: "GET_TOTALS" });
   }, [state.cart]);
